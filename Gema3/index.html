@@ -1,0 +1,220 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>谷歌Gemma3本地部署 | 慢漫</title><meta name="author" content="Lagom"><meta name="copyright" content="Lagom"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="Gemma 3 被谷歌称为目前最强的开源视觉模型之一。 该模型支持超过35种语言，能够分析文本、图像和短视频。值得注意的是，Gemma 3 的视觉编码器经过升级，支持高分辨率和非方形图像，并引入了 ShieldGemma 2 图像安全分类器，用于过滤被分类为性暗示、危险或暴力的内容。这些特性使得 Gemma 3 成为当前最强大的开源视觉模型之一。 ![Gemma 3 (5)](..&#x2F;im">
+<meta property="og:type" content="article">
+<meta property="og:title" content="谷歌Gemma3本地部署">
+<meta property="og:url" content="http://lagomai.github.io/Gema3/index.html">
+<meta property="og:site_name" content="慢漫">
+<meta property="og:description" content="Gemma 3 被谷歌称为目前最强的开源视觉模型之一。 该模型支持超过35种语言，能够分析文本、图像和短视频。值得注意的是，Gemma 3 的视觉编码器经过升级，支持高分辨率和非方形图像，并引入了 ShieldGemma 2 图像安全分类器，用于过滤被分类为性暗示、危险或暴力的内容。这些特性使得 Gemma 3 成为当前最强大的开源视觉模型之一。 ![Gemma 3 (5)](..&#x2F;im">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://lagomai.github.io/img/butterfly-icon.png">
+<meta property="article:published_time" content="2025-03-16T15:49:18.000Z">
+<meta property="article:modified_time" content="2025-03-16T16:36:45.762Z">
+<meta property="article:author" content="Lagom">
+<meta property="article:tag" content="AI">
+<meta property="article:tag" content="Gema3">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://lagomai.github.io/img/butterfly-icon.png"><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="http://lagomai.github.io/Gema3/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":false},
+  copy: {
+    success: '复制成功',
+    error: '复制失败',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'null',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '谷歌Gemma3本地部署',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  isShuoshuo: false
+}</script><meta name="generator" content="Hexo 7.3.0"></head><body><div class="post" id="body-wrap"><header class="post-bg" id="page-header"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><span class="site-name">慢漫</span></a><a class="nav-page-title" href="/"><span class="site-name">谷歌Gemma3本地部署</span></a></span><div id="menus"></div></nav><div id="post-info"><h1 class="post-title">谷歌Gemma3本地部署</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2025-03-16T15:49:18.000Z" title="发表于 2025-03-16 23:49:18">2025-03-16</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2025-03-16T16:36:45.762Z" title="更新于 2025-03-17 00:36:45">2025-03-17</time></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">浏览量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><p>Gemma 3 被谷歌称为目前最强的开源视觉模型之一。 该模型支持超过35种语言，能够分析文本、图像和短视频。值得注意的是，Gemma 3 的视觉编码器经过升级，支持高分辨率和非方形图像，并引入了 ShieldGemma 2 图像安全分类器，用于过滤被分类为性暗示、危险或暴力的内容。这些特性使得 Gemma 3 成为当前最强大的开源视觉模型之一。</p>
+<p>![Gemma 3 (5)](..&#x2F;images&#x2F;Gemma 3 (5).webp)<img src="/../images/b6e32a147120250315105941.webp" alt="图片[1]-谷歌 Gemma 3 发布：更强大、更智能的多模态 AI，本地轻松部署使用！-零度博客"></p>
+<p>此图表按 Chatbot Arena Elo 得分对 AI 模型进行排名；得分越高（数字越大），表示用户偏好越高。点表示估计的 NVIDIA H100 GPU 要求。Gemma 3 27B 排名靠前，只需要一个 GPU，而其他模型则需要多达 32 个。</p>
+<h2 id="最新的-Gemma-3-多模态开源模型新功能"><a href="#最新的-Gemma-3-多模态开源模型新功能" class="headerlink" title="最新的 Gemma 3 多模态开源模型新功能"></a>最新的 Gemma 3 多模态开源模型新功能</h2><ul>
+<li><strong>使用世界上最好的单加速器模型进行构建：</strong> Gemma 3 以其尺寸提供最先进的性能，在 LMArena 排行榜的初步人类偏好评估中胜过 Llama3-405B、DeepSeek-V3 和 o3-mini。这可以帮助您创建可安装在单个 GPU 或 TPU 主机上的引人入胜的用户体验。</li>
+<li><strong>以 140 种语言走向全球：</strong>构建使用客户语言的应用程序。Gemma 3 提供对超过 35 种语言的开箱即用支持和对超过 140 种语言的预训练支持。</li>
+<li><strong>打造具备高级文本和视觉推理能力的AI：</strong>轻松构建分析图片、文本、短视频等应用，开启交互智能化新可能<a target="_blank" rel="noopener" href="https://blog.google/technology/developers/gemma-3/#footnote-1">1</a>。</li>
+<li><strong>使用扩展的上下文窗口处理复杂任务：</strong> Gemma 3 提供 128k 令牌上下文窗口，让您的应用程序处理和理解大量信息。</li>
+<li><strong>使用函数调用创建 AI 驱动的工作流程：</strong> Gemma 3 支持函数调用和结构化输出，以帮助您自动执行任务并构建代理体验。</li>
+<li><strong>通过量化模型更快地实现高性能：</strong> Gemma 3 引入了官方量化版本，减少了模型大小和计算要求，同时保持了高精度。</li>
+</ul>
+<p>本地安装，单显卡可以选择1b，4b，12b，27b，推荐选择27b，因为Gemma 3 27B 处于帕累托最佳点</p>
+<p>![图片[2]-谷歌 Gemma 3 发布：更强大、更智能的多模态 AI，本地轻松部署使用！-零度博客](..&#x2F;images&#x2F;Gemma 3 (2).webp)</p>
+<table>
+<thead>
+<tr>
+<th align="center">预先训练</th>
+<th align="center">指令调整</th>
+<th align="center">多式联运</th>
+<th align="center">多种语言</th>
+<th align="center">输入上下文窗口</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center"><a target="_blank" rel="noopener" href="http://hf.co/google/gemma-3-1b-pt">gemma-3-1b-pt</a></td>
+<td align="center"><a target="_blank" rel="noopener" href="http://hf.co/google/gemma-3-1b-it">gemma-3-1b-it</a></td>
+<td align="center">❌</td>
+<td align="center">英语</td>
+<td align="center">32千</td>
+</tr>
+<tr>
+<td align="center"><a target="_blank" rel="noopener" href="http://hf.co/google/gemma-3-4b-pt">Gemma-3-4b-pt</a></td>
+<td align="center"><a target="_blank" rel="noopener" href="http://hf.co/google/gemma-3-4b-it">gemma-3-4b-it</a></td>
+<td align="center">✅</td>
+<td align="center">+140 种语言</td>
+<td align="center">128千</td>
+</tr>
+<tr>
+<td align="center"><a target="_blank" rel="noopener" href="http://hf.co/google/gemma-3-12b-pt">gemma-3-12b-pt</a></td>
+<td align="center"><a target="_blank" rel="noopener" href="http://hf.co/google/gemma-3-12b-it">gemma-3-12b-it</a></td>
+<td align="center">✅</td>
+<td align="center">+140 种语言</td>
+<td align="center">128千</td>
+</tr>
+<tr>
+<td align="center"><a target="_blank" rel="noopener" href="http://hf.co/google/gemma-3-27b-pt">gemma-3-27b-pt</a></td>
+<td align="center"><a target="_blank" rel="noopener" href="http://hf.co/google/gemma-3-27b-it">gemma-3-27b-it</a></td>
+<td align="center">✅</td>
+<td align="center">+140 种语言</td>
+<td align="center">128千</td>
+</tr>
+</tbody></table>
+<p>对于 1B 版本，输入上下文窗口长度已从 Gemma 2 的 8k 增加到<strong>32k ，对于其他所有版本，则****增加到 128k</strong>。与其他 VLM（视觉语言模型）一样，Gemma 3 会根据用户输入生成文本，这些文本可能由文本组成，也可能由图像组成。示例用途包括问答、分析图像内容、总结文档等。</p>
+<p><strong>本地部署Gemma 3开源大模型：</strong></p>
+<p>1、下载官方 Ollama 【**<a target="_blank" rel="noopener" href="https://ollama.com/">点击前往</a>**】 ，并通过下方的安装命令执行下载：</p>
+<p>普通用户建议选择4b和12b，显卡好的可以上27b </p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">ollama run gemma3:1b</span><br><span class="line"></span><br><span class="line">ollama run gemma3:4b</span><br><span class="line"></span><br><span class="line">ollama run gemma3:12b</span><br><span class="line"></span><br><span class="line">ollama run gemma3:27b</span><br></pre></td></tr></table></figure>
+
+<p>2、通过Chrome插件调用本地Gemma 3视觉大模型【**<a target="_blank" rel="noopener" href="https://chromewebstore.google.com/detail/page-assist-%E6%9C%AC%E5%9C%B0-ai-%E6%A8%A1%E5%9E%8B%E7%9A%84-web/jfgfiigpkhlkbnfnbobbkinehhfdhndo?pli=1">点击下载</a>**】</p>
+<p>![图片[3]-谷歌 Gemma 3 发布：更强大、更智能的多模态 AI，本地轻松部署使用！-零度博客](..&#x2F;images&#x2F;Gemma 3 (1).webp)</p>
+<p>就可以愉快的使用了</p>
+<p>![图片[4]-谷歌 Gemma 3 发布：更强大、更智能的多模态 AI，本地轻松部署使用！-零度博客](..&#x2F;images&#x2F;Gemma 3 (3).webp)可以很好的对图片进行识别：</p>
+<p>![图片[5]-谷歌 Gemma 3 发布：更强大、更智能的多模态 AI，本地轻松部署使用！-零度博客](..&#x2F;images&#x2F;Gemma 3 (6).webp)</p>
+<p>当然你可以使用Google AI Studio 对短视频进行分析，支持上传和链接</p>
+<p>Google AI Studio ：【**<a target="_blank" rel="noopener" href="https://aistudio.google.com/prompts/new_chat">点击前往</a>**】</p>
+<p>![afbbc931f520250315153635](..&#x2F;images&#x2F;Gemma 3 (4).webp)</p>
+<blockquote>
+<p>[!NOTE]</p>
+<p> 转至零度博客：<a target="_blank" rel="noopener" href="https://www.freedidi.com/18779.html">https://www.freedidi.com/18779.html</a></p>
+</blockquote>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a href="http://lagomai.github.io">Lagom</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="http://lagomai.github.io/Gema3/">http://lagomai.github.io/Gema3/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来源 <a href="http://lagomai.github.io" target="_blank">慢漫</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/AI/">AI</a><a class="post-meta__tags" href="/tags/Gema3/">Gema3</a></div><div class="post-share"><div class="social-share" data-image="/img/butterfly-icon.png" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related full-width" href="/2025/01/07/ComfyUI-BiJi/" title="ComfyUI-BiJi"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-right"><div class="info-1"><div class="info-item-1">下一篇</div><div class="info-item-2">ComfyUI-BiJi</div></div><div class="info-2"><div class="info-item-1">l </div></div></div></a></nav></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="/img/butterfly-icon.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">Lagom</div><div class="author-info-description">一个懒人博客，记录有的没的</div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">9</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">10</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">0</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/xxxxxx"><i class="fab fa-github"></i><span>Follow Me</span></a></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">This is my Blog</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%9C%80%E6%96%B0%E7%9A%84-Gemma-3-%E5%A4%9A%E6%A8%A1%E6%80%81%E5%BC%80%E6%BA%90%E6%A8%A1%E5%9E%8B%E6%96%B0%E5%8A%9F%E8%83%BD"><span class="toc-number">1.</span> <span class="toc-text">最新的 Gemma 3 多模态开源模型新功能</span></a></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/Gema3/" title="谷歌Gemma3本地部署">谷歌Gemma3本地部署</a><time datetime="2025-03-16T15:49:18.000Z" title="发表于 2025-03-16 23:49:18">2025-03-16</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/01/07/ComfyUI-BiJi/" title="ComfyUI-BiJi">ComfyUI-BiJi</a><time datetime="2025-01-07T14:21:10.000Z" title="发表于 2025-01-07 22:21:10">2025-01-07</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/Image-Compression-Tool/" title="Image Compression Tool">Image Compression Tool</a><time datetime="2024-12-29T05:14:53.000Z" title="发表于 2024-12-29 13:14:53">2024-12-29</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/Install-ComfyUI/" title="Install ComfyUI">Install ComfyUI</a><time datetime="2024-12-28T00:33:45.000Z" title="发表于 2024-12-28 08:33:45">2024-12-28</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/Butterfly-Theme-Customization/" title="Butterfly主题美化">Butterfly主题美化</a><time datetime="2024-12-27T15:34:31.000Z" title="发表于 2024-12-27 23:34:31">2024-12-27</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2019 - 2025 By Lagom</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><div class="js-pjax"></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>
